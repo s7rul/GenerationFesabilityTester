@@ -15,14 +15,8 @@ public class LookupTable {
 		}
 	}
 	
-	public int getMemoryRequrimentFromName(String name) {
-		if (table.containsKey(name)) {
-			DeviceType t = table.get(name);
-			return t.getRamRequirement();
-		} else {
-			//error
-			return -1; // TODO: change this
-		}
+	public DeviceType getDeviceTypeFromName(String name) {
+		return table.get(name);
 	}
 	
 	public static void main(String[] args) {
@@ -32,8 +26,8 @@ public class LookupTable {
 		tt.add("test1", 200);
 		tt.add("test3", 100);
 		
-		System.out.println("Test1 " + tt.getMemoryRequrimentFromName("test1"));
-		System.out.println("Test2 " + tt.getMemoryRequrimentFromName("test2"));
+		System.out.println("Test1 " + tt.getDeviceTypeFromName("test1"));
+		System.out.println("Test2 " + tt.getDeviceTypeFromName("test2"));
 	}
 		
 }
