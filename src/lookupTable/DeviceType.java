@@ -2,6 +2,7 @@ package lookupTable;
 
 import java.util.LinkedList;
 import java.util.List;
+//import lookupTable.Pair;
 
 public class DeviceType {
 	public enum Compatabilety {
@@ -43,6 +44,24 @@ public class DeviceType {
 	public Compatabilety getCompatabilety() {
 		return this.compatible;
 	}
+	
+	private Boolean validateRequirements(List<Pair<String, Integer>> values) {
+		for (Requirement n: this.getRequirements()) {
+			for (Pair<String, Integer> x: values) {
+				if (x.key.equals(n.name)) {
+					if(!n.validate(x.value)) {
+						return false;
+					} else {
+						break;
+					}
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	
 	
 	public static void main(String[] args) {
 		// Small simple tests

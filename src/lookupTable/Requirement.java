@@ -17,7 +17,7 @@ public class Requirement {
 		this.value = value;
 	}
 	
-	public Boolean validate(int compValue) {
+	Boolean validate(int compValue) {
 		switch(this.type) {
 			case EQUAL:
 				return (compValue == this.value);
