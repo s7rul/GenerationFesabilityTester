@@ -45,6 +45,23 @@ public class DeviceType {
 		return this.compatible;
 	}
 	
+	public Boolean validateDeviceType() {
+		return (this.compatible == DeviceType.Compatabilety.YES);
+	}
+	
+	public Boolean validateDeviceType(List<Pair<String, Integer>> values) {
+		switch (this.compatible) {
+		case YES:
+			return true;
+		case NO:
+			return false;
+		case WITH_REQUIREMENT:
+			return this.validateRequirements(values);
+		}
+		// should never ever get here
+		return false;
+	}
+	
 	private Boolean validateRequirements(List<Pair<String, Integer>> values) {
 		for (Requirement n: this.getRequirements()) {
 			for (Pair<String, Integer> x: values) {
