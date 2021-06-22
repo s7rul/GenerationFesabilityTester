@@ -8,21 +8,21 @@ public class DeviceType {
 	}
 	
 	private String name = new String();
-	private int ramRequriment;
+	private Requirement requirement;
 	private Compatabilety compatible;
 	
-	private DeviceType(String name, int ramRequirement, Compatabilety compatible) {
+	private DeviceType(String name, Requirement requirement, Compatabilety compatible) {
 		this.name = name;
-		this.ramRequriment = ramRequirement;
+		this.requirement = requirement;
 		this.compatible = compatible;
 	}
 	
-	public DeviceType(String name, int ramRequirement) {
-		this(name, ramRequirement, Compatabilety.WITH_REQUIREMENT);
+	public DeviceType(String name, Requirement requirement) {
+		this(name, requirement, Compatabilety.WITH_REQUIREMENT);
 	}
 	
-	public int getRamRequirement() {
-		return this.ramRequriment;
+	public Requirement getRequirements() {
+		return this.requirement;
 	}
 	
 	public String getName() {
