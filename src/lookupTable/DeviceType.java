@@ -1,5 +1,8 @@
 package lookupTable;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class DeviceType {
 	public enum Compatabilety {
 		YES,
@@ -8,21 +11,29 @@ public class DeviceType {
 	}
 	
 	private String name = new String();
-	private Requirement requirement;
+	private List<Requirement> requirements;
 	private Compatabilety compatible;
 	
-	private DeviceType(String name, Requirement requirement, Compatabilety compatible) {
+	public DeviceType(String name, Compatabilety compatible) {
 		this.name = name;
-		this.requirement = requirement;
 		this.compatible = compatible;
+		this.requirements = new LinkedList<Requirement>();
 	}
 	
-	public DeviceType(String name, Requirement requirement) {
-		this(name, requirement, Compatabilety.WITH_REQUIREMENT);
+	public void addRequirement(Requirement x) {
+		this.requirements.add(x);
 	}
 	
-	public Requirement getRequirements() {
-		return this.requirement;
+	public void removeRequirementByName(String name) {
+		for (int i = 0; i < this.requirements.size(); i++) {
+			if (this.requirements.get(i).name.equals(name)) {
+				this.requirements.remove(i);
+			}
+		}
+	}
+	
+	public List<Requirement> getRequirements() {
+		return this.requirements;
 	}
 	
 	public String getName() {
@@ -33,5 +44,25 @@ public class DeviceType {
 		return this.compatible;
 	}
 	
-	
+	public static void main(String[] args) {
+		// Small simple tests
+		
+		DeviceType device = new DeviceType("Test", DeviceType.Compatabilety.WITH_REQUIREMENT);
+		Requirement r1 = new Requirement("ram", Requirement.TypeEnum.EQUAL_OR_MORE, 2048);
+		Requirement r2 = new Requirement("cpu_Hz", Requirement.TypeEnum.MORE_THEN, 1000);
+		device.addRequirement(r1);
+		device.addRequirement(r2);
+		
+		List<Requirement> rList = device.getRequirements();
+		System.out.println("Printing out requirements");
+		for (Requirement n: rList) {
+			System.out.println(n.toString());
+		}
+		System.out.println("Removing r1");
+		device.removeRequirementByName("ram");
+		System.out.println("Printing out requirements");
+		for (Requirement n: rList) {
+			System.out.println(n.toString());
+		}
+	}
 }

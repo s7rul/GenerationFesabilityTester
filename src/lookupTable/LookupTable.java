@@ -7,7 +7,7 @@ public class LookupTable {
 	
 	public void add(String name, int memoryRequrement) {
 		if (!table.containsKey(name)) {
-			DeviceType newDeviceType = new DeviceType(name, memoryRequrement);
+			DeviceType newDeviceType = new DeviceType(name, DeviceType.Compatabilety.YES);
 			this.table.put(name, newDeviceType);
 		} else {
 			// Device allready in table
