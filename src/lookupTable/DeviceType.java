@@ -45,11 +45,11 @@ public class DeviceType {
 		return this.compatible;
 	}
 	
-	public Boolean validateDeviceType() {
+	public Boolean validate() {
 		return (this.compatible == DeviceType.Compatabilety.YES);
 	}
 	
-	public Boolean validateDeviceType(List<Pair<String, Integer>> values) {
+	public Boolean validate(List<Pair<String, Integer>> values) {
 		switch (this.compatible) {
 		case YES:
 			return true;
