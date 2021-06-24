@@ -14,4 +14,8 @@ public class Device {
 		this.deviceType = deviceType;
 		this.metaData = metaData;
 	}
+	
+	public int getDeviceID() {
+		return this.deviceID;
+	}
 }
