@@ -5,7 +5,7 @@ import java.util.Hashtable;
 public class LookupTable {
 	private Hashtable<String, DeviceType> table = new Hashtable<>();
 	
-	public void add(String name, int memoryRequrement) {
+	public void add(String name) {
 		if (!table.containsKey(name)) {
 			DeviceType newDeviceType = new DeviceType(name, DeviceType.Compatabilety.YES);
 			this.table.put(name, newDeviceType);
@@ -23,8 +23,8 @@ public class LookupTable {
 		// fast dirty test
 		LookupTable tt = new LookupTable();
 		
-		tt.add("test1", 200);
-		tt.add("test3", 100);
+		tt.add("test1");
+		tt.add("test3");
 		
 		System.out.println("Test1 " + tt.getDeviceTypeFromName("test1"));
 		System.out.println("Test2 " + tt.getDeviceTypeFromName("test2"));

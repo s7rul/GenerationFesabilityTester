@@ -2,7 +2,6 @@ package lookupTable;
 
 import java.util.LinkedList;
 import java.util.List;
-//import lookupTable.Pair;
 
 public class DeviceType {
 	public enum Compatabilety {
@@ -76,6 +75,16 @@ public class DeviceType {
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		String ret = "";
+		ret += ("Name: " + this.name + "\nCompatible: " + this.compatible.toString() + "\nRequirements:\n");
+		for (Requirement n: this.requirements) {
+			ret += (n.toString() + "\n");
+		}
+		return ret;
 	}
 	
 	
