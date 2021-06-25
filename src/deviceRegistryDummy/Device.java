@@ -18,4 +18,12 @@ public class Device {
 	public int getDeviceID() {
 		return this.deviceID;
 	}
+
+	public String getDeviceType() {
+		return this.deviceType;
+	}
+
+	public List<Pair<String, Integer>> getMetaData() {
+		return this.metaData;
+	}
 }
