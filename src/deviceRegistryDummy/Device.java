@@ -5,7 +5,7 @@ import java.util.List;
 import lookupTable.Pair;
 
 public class Device {
-	private int deviceID;
+	private Integer deviceID;
 	private String deviceType;
 	private List<Pair<String, Integer>> metaData;
 	
@@ -25,5 +25,15 @@ public class Device {
 
 	public List<Pair<String, Integer>> getMetaData() {
 		return this.metaData;
+	}
+
+	@Override
+	public String toString() {
+		String ret = ("ID: " + this.deviceID.toString() + " Type: " + this.deviceType + "\n");
+		ret += "meta data:\n";
+		for(Pair<String, Integer> n: this.metaData) {
+			ret += ("Key: " + n.key + " value: " + n.value);
+		}
+		return ret;
 	}
 }
