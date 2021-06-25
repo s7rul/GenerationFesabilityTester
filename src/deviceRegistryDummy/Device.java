@@ -32,7 +32,7 @@ public class Device {
 		String ret = ("ID: " + this.deviceID.toString() + " Type: " + this.deviceType + "\n");
 		ret += "meta data:\n";
 		for(Pair<String, Integer> n: this.metaData) {
-			ret += ("Key: " + n.key + " value: " + n.value);
+			ret += ("Key: " + n.key + "\t\tvalue: " + n.value + "\n");
 		}
 		return ret;
 	}
