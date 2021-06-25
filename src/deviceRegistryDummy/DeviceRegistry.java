@@ -41,7 +41,7 @@ public class DeviceRegistry {
 		d2l.add(x3);
 		d2l.add(x4);
 		d2l.add(x5);
-		Device d2 = new Device(2, "rapberrypi", d2l);
+		Device d2 = new Device(2, "raspberrypi", d2l);
 
 		List<Pair<String, Integer>> d3l = new LinkedList<>();
 		Pair<String, Integer> x6 = new Pair<>("ram", 2000);
@@ -50,10 +50,21 @@ public class DeviceRegistry {
 		d3l.add(x6);
 		d3l.add(x7);
 		d3l.add(x8);
-		Device d3 = new Device(2, "rapberrypi", d3l);
+		Device d3 = new Device(3, "raspberrypi", d3l);
 
 		this.add(d1);
 		this.add(d2);
 		this.add(d3);
+	}
+
+	@Override
+	public String toString() {
+		return this.table.toString();
+	}
+
+	public static void main(String[] args) {
+		DeviceRegistry testRegistry = new DeviceRegistry();
+		testRegistry.populate();
+		System.out.println(testRegistry);
 	}
 }
