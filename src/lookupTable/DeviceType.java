@@ -59,15 +59,22 @@ public class DeviceType {
 	}
 	
 	private Boolean validateRequirements(List<Pair<String, Integer>> values) {
+		Boolean noKey;
 		for (Requirement n: this.getRequirements()) {
+		    noKey = true;
 			for (Pair<String, Integer> x: values) {
 				if (x.key.equals(n.name)) {
+					noKey = false;
 					if(!n.validate(x.value)) {
 						return false;
 					} else {
 						break;
 					}
 				}
+			}
+
+			if (noKey) {
+				return false;
 			}
 		}
 		
