@@ -5,8 +5,9 @@ import deviceRegistryDummy.Device;
 
 public class GenerationFeasibilityTester {
 
-    private LookupTable table;
-    private DeviceRegistry registry;
+    final private LookupTable table;
+    final private DeviceRegistry registry;
+    private Boolean guessAllowed;
 
     public GenerationFeasibilityTester() {
         this.table = new LookupTable();
@@ -15,20 +16,31 @@ public class GenerationFeasibilityTester {
         // Only for testing remove when integrating with the real device registry
         this.registry.populate();
         this.table.populate();
+
+        this.guessAllowed = true;
     }
 
     public Boolean generationFeasibilityByDeviceID(Integer deviceID) {
         // TODO: add proper error handling
         Device d = registry.getDeviceByID(deviceID);
         if (d == null) {
-            System.out.println("device not in device registry");
             return false;
         }
 
         DeviceType type = table.getDeviceTypeByName(d.getDeviceType());
         if (type == null) {
-            System.out.println("device type not in table");
-            return false;
+            if (guessAllowed) {
+                DeviceType genericType = table.getDeviceTypeByName("generic");
+
+                // check that generic device type exist
+                if (!(genericType == null)) {
+                    return genericType.validate(d.getMetaData());
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         } else {
             return type.validate(d.getMetaData());
         }
