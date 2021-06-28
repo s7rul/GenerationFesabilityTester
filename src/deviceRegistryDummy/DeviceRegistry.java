@@ -52,9 +52,29 @@ public class DeviceRegistry {
 		d3l.add(x8);
 		Device d3 = new Device(3, "raspberrypi", d3l);
 
+		List<Pair<String, Integer>> d4l = new LinkedList<>();
+		Pair<String, Integer> x9 = new Pair<>("ram", 64);
+		Pair<String, Integer> x10 = new Pair<>("cpu_speed", 800);
+		Pair<String, Integer> x11 = new Pair<>("rev", 2);
+		d4l.add(x9);
+		d4l.add(x10);
+		d4l.add(x11);
+		Device d4 = new Device(3, "mc-123", d4l);
+
+		List<Pair<String, Integer>> d5l = new LinkedList<>();
+		Pair<String, Integer> x12 = new Pair<>("ram", 1280000);
+		Pair<String, Integer> x13 = new Pair<>("cpu_speed", 4000);
+		Pair<String, Integer> x14 = new Pair<>("model", 2);
+		d3l.add(x12);
+		d3l.add(x13);
+		d3l.add(x14);
+		Device d5 = new Device(3, "big_random_server", d5l);
+
 		this.add(d1);
 		this.add(d2);
 		this.add(d3);
+		this.add(d4);
+		this.add(d5);
 	}
 
 	@Override
