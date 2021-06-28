@@ -46,11 +46,15 @@ public class DeviceType {
 	}
 	
 	public Boolean validate(List<Pair<String, Integer>> values) {
-		return switch (this.compatible) {
-			case YES -> true;
-			case NO -> false;
-			case WITH_REQUIREMENT -> this.validateRequirements(values);
-		};
+		switch (this.compatible) {
+			case YES:
+				return true;
+			case NO:
+				return false;
+			case WITH_REQUIREMENT:
+				return this.validateRequirements(values);
+		}
+		return false;
 		// should never ever get here
 	}
 	
