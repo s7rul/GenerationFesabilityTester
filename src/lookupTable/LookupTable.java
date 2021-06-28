@@ -24,10 +24,16 @@ public class LookupTable {
 
 	public void populate() {
 		DeviceType t1 = new DeviceType("laptop", DeviceType.Compatabilety.YES);
-		DeviceType t3 = new DeviceType("mc-123", DeviceType.Compatabilety.NO);
+		DeviceType t3 = new DeviceType("Nucleo-144", DeviceType.Compatabilety.NO);
 		DeviceType t2 = new DeviceType("raspberrypi", DeviceType.Compatabilety.WITH_REQUIREMENT);
 		Requirement r1 = new Requirement("model", Requirement.TypeEnum.EQUAL, 4);
+		Requirement r2 = new Requirement("ram", Requirement.TypeEnum.EQUAL_OR_MORE, 4000000);
 		t2.addRequirement(r1);
+		t2.addRequirement(r2);
+
+		DeviceType generic = new DeviceType("generic", DeviceType.Compatabilety.WITH_REQUIREMENT);
+		Requirement gr1 = new Requirement("ram", Requirement.TypeEnum.EQUAL_OR_MORE, 8000000);
+		Requirement gr2 = new Requirement("cpu_speed", Requirement.TypeEnum.EQUAL_OR_MORE, 2500);
 
 		this.add(t1);
 		this.add(t2);
