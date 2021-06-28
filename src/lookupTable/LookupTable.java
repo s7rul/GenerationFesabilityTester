@@ -21,6 +21,18 @@ public class LookupTable {
 	public DeviceType getDeviceTypeByName(String name) {
 		return table.get(name);
 	}
+
+	public void populate() {
+		DeviceType t1 = new DeviceType("laptop", DeviceType.Compatabilety.YES);
+		DeviceType t3 = new DeviceType("mc-123", DeviceType.Compatabilety.NO);
+		DeviceType t2 = new DeviceType("raspberrypi", DeviceType.Compatabilety.WITH_REQUIREMENT);
+		Requirement r1 = new Requirement("model", Requirement.TypeEnum.EQUAL, 4);
+		t2.addRequirement(r1);
+
+		this.add(t1);
+		this.add(t2);
+		this.add(t3);
+	}
 	
 	public static void main(String[] args) {
 		// fast dirty test
