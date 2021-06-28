@@ -34,10 +34,13 @@ public class LookupTable {
 		DeviceType generic = new DeviceType("generic", DeviceType.Compatibility.WITH_REQUIREMENT);
 		Requirement gr1 = new Requirement("ram", Requirement.TypeEnum.EQUAL_OR_MORE, 8000000);
 		Requirement gr2 = new Requirement("cpu_speed", Requirement.TypeEnum.EQUAL_OR_MORE, 2500);
+		generic.addRequirement(gr1);
+		generic.addRequirement(gr2);
 
 		this.add(t1);
 		this.add(t2);
 		this.add(t3);
+		this.add(generic);
 	}
 	
 	public static void main(String[] args) {

@@ -63,9 +63,9 @@ public class DeviceRegistry {
 		Pair<String, Integer> x12 = new Pair<>("ram", 128000000);
 		Pair<String, Integer> x13 = new Pair<>("cpu_speed", 3000);
 		Pair<String, Integer> x14 = new Pair<>("model", 2);
-		d3l.add(x12);
-		d3l.add(x13);
-		d3l.add(x14);
+		d5l.add(x12);
+		d5l.add(x13);
+		d5l.add(x14);
 		Device d5 = new Device(5, "big_random_server", d5l);
 
 		this.add(d1);
