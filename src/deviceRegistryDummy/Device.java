@@ -2,7 +2,7 @@ package deviceRegistryDummy;
 
 import java.util.List;
 
-import lookupTable.Pair;
+import GenerationFeasibilityTester.Pair;
 
 public class Device {
 	private Integer deviceID;

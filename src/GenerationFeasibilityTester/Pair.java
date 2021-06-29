@@ -1,4 +1,4 @@
-package lookupTable;
+package GenerationFeasibilityTester;
 
 public class Pair <T, R> {
 	public T key;

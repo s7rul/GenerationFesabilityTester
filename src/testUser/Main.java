@@ -1,6 +1,6 @@
 package testUser;
 
-import lookupTable.GenerationFeasibilityTester;
+import GenerationFeasibilityTester.GenerationFeasibilityTester;
 
 public class Main {
     static public void main(String[] args) {

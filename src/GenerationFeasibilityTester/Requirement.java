@@ -1,4 +1,4 @@
-package lookupTable;
+package GenerationFeasibilityTester;
 
 
 

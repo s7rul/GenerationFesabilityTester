@@ -1,6 +1,6 @@
 package deviceRegistryDummy;
 
-import lookupTable.Pair;
+import GenerationFeasibilityTester.Pair;
 
 import java.util.Hashtable;
 import java.util.LinkedList;

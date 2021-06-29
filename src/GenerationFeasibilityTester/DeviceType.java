@@ -1,4 +1,4 @@
-package lookupTable;
+package GenerationFeasibilityTester;
 
 import java.util.LinkedList;
 import java.util.List;
