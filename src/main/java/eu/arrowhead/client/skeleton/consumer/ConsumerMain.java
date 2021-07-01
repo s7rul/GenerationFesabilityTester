@@ -1,7 +1,18 @@
 package eu.arrowhead.client.skeleton.consumer;
 
+import org.apache.http.Header;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.http.HttpEntity;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.InputStreamBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -23,6 +34,8 @@ import eu.arrowhead.common.dto.shared.ServiceInterfaceResponseDTO;
 import eu.arrowhead.common.dto.shared.ServiceQueryFormDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 import eu.arrowhead.common.exception.InvalidParameterException;
+
+import java.io.*;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE}) //TODO: add custom packages if any
@@ -50,8 +63,8 @@ public class ConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
-    	logger.info("Orchestration request for test service:");
-    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(ConsumerConstants.TEST_SERVICE_DEFINITION)
+    	logger.info("Orchestration request for deploy_jar service:");
+    	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(ConsumerConstants.DEPLOY_JAR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
     																		.build();
     	
@@ -73,8 +86,9 @@ public class ConsumerMain implements ApplicationRunner {
 		} else if (orchestrationResponse.getResponse().isEmpty()) {
 			logger.info("No provider found during the orchestration");
 		} else {
+			// TODO: make this actually chose the right service provider
 			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
-			validateOrchestrationResult(orchestrationResult, ConsumerConstants.TEST_SERVICE_DEFINITION);
+			validateOrchestrationResult(orchestrationResult, ConsumerConstants.DEPLOY_JAR_SERVICE_DEFINITION);
 			
 			logger.info("Create a request:");
 			final HttpMethod httpMethod = HttpMethod.valueOf(orchestrationResult.getMetadata().get(ConsumerConstants.HTTP_METHOD));
@@ -82,12 +96,45 @@ public class ConsumerMain implements ApplicationRunner {
 			/*final String sr = arrowheadService.consumeServiceHTTP(String.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(ConsumerConstants.HTTP_METHOD)),
 					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
 					getInterface(), token, null, new String[0]);*/
-			final String sr = arrowheadService.consumeServiceHTTP(String.class, httpMethod,
-					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-					getInterface(), token, null, new String[0]);
+
+			// create payload
+			File toDeploy = new File("/home/s7rul/IdeaProjects/GenerationFesabilityTester/InterfaceLightweight-1.0.jar");
+			FileInputStream toDeployStream = null;
+			HttpEntity entity = null;
+			CloseableHttpClient client = HttpClients.createDefault();
+			HttpPost httppost = new HttpPost("http://127.0.0.1:8888/deploy_jar");
+
+			try {
+			    toDeployStream = new FileInputStream(toDeploy);
+			    MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+			    entityBuilder.addPart("file", new InputStreamBody(toDeployStream, toDeploy.getName()));
+			    entityBuilder.addTextBody("test", "tt");
+			    entity = entityBuilder.build();
+
+			    httppost.setEntity(entity);
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+			CloseableHttpResponse response = client.execute(httppost);
+
+			//final String sr = arrowheadService.consumeServiceHTTP(String.class, httpMethod,
+					//orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+					//getInterface(), token, entity, new String[0]);
 			logger.info("Provider response");
-			printOut(sr);
-				
+			//printOut(sr);
+
+			try {
+				System.out.println("#-------------------------------------------------------------#");
+				System.out.println(response.getStatusLine());
+				HttpEntity resEntity = response.getEntity();
+				EntityUtils.consume(resEntity);
+			} catch (Exception e) {
+				System.out.println(e);
+			} finally {
+				response.close();
+			}
+
+			client.close();
 		}
 	}
     
