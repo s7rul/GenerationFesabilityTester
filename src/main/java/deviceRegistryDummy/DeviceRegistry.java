@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DeviceRegistry {
-	private Hashtable<Integer, Device> table = new Hashtable<>();
+	private Hashtable<Long, Device> table = new Hashtable<>();
 	
 	public void add(Device input) {
 		if (!table.containsKey(input.getDeviceID())) {
@@ -22,7 +22,7 @@ public class DeviceRegistry {
 		this.table.remove(name);
 	}
 	
-	public Device getDeviceByID(int id) {
+	public Device getDeviceByID(Long id) {
 		return table.get(id);
 	}
 
@@ -32,7 +32,7 @@ public class DeviceRegistry {
 		Pair<String, Integer> x2 = new Pair<>("cpu_speed", 3000);
 		d1l.add(x1);
 		d1l.add(x2);
-		Device d1 = new Device(1, "laptop", d1l);
+		Device d1 = new Device(1l, "laptop", d1l);
 
 		List<Pair<String, Integer>> d2l = new LinkedList<>();
 		Pair<String, Integer> x3 = new Pair<>("ram", 4000000);
@@ -41,7 +41,7 @@ public class DeviceRegistry {
 		d2l.add(x3);
 		d2l.add(x4);
 		d2l.add(x5);
-		Device d2 = new Device(2, "raspberrypi", d2l);
+		Device d2 = new Device(2l, "raspberrypi", d2l);
 
 		List<Pair<String, Integer>> d3l = new LinkedList<>();
 		Pair<String, Integer> x6 = new Pair<>("ram", 1000000);
@@ -50,14 +50,14 @@ public class DeviceRegistry {
 		d3l.add(x6);
 		d3l.add(x7);
 		d3l.add(x8);
-		Device d3 = new Device(3, "raspberrypi", d3l);
+		Device d3 = new Device(3l, "raspberrypi", d3l);
 
 		List<Pair<String, Integer>> d4l = new LinkedList<>();
 		Pair<String, Integer> x9 = new Pair<>("ram", 320);
 		Pair<String, Integer> x10 = new Pair<>("cpu_speed", 120);
 		d4l.add(x9);
 		d4l.add(x10);
-		Device d4 = new Device(4, "Nucleo-144", d4l);
+		Device d4 = new Device(4l, "Nucleo-144", d4l);
 
 		List<Pair<String, Integer>> d5l = new LinkedList<>();
 		Pair<String, Integer> x12 = new Pair<>("ram", 128000000);
@@ -66,7 +66,7 @@ public class DeviceRegistry {
 		d5l.add(x12);
 		d5l.add(x13);
 		d5l.add(x14);
-		Device d5 = new Device(5, "big_random_server", d5l);
+		Device d5 = new Device(5l, "big_random_server", d5l);
 
 		this.add(d1);
 		this.add(d2);

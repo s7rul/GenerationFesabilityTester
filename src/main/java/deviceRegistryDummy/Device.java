@@ -5,17 +5,17 @@ import java.util.List;
 import GenerationFeasibilityTester.Pair;
 
 public class Device {
-	private Integer deviceID;
+	private Long deviceID;
 	private String deviceType;
 	private List<Pair<String, Integer>> metaData;
 	
-	public Device(int deviceID, String deviceType, List<Pair<String, Integer>> metaData) {
+	public Device(Long deviceID, String deviceType, List<Pair<String, Integer>> metaData) {
 		this.deviceID = deviceID;
 		this.deviceType = deviceType;
 		this.metaData = metaData;
 	}
 	
-	public int getDeviceID() {
+	public Long getDeviceID() {
 		return this.deviceID;
 	}
 

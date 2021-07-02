@@ -20,7 +20,7 @@ public class GenerationFeasibilityTester {
         this.guessAllowed = true;
     }
 
-    public Boolean generationFeasibilityByDeviceID(Integer deviceID) {
+    public Boolean generationFeasibilityByDeviceID(Long deviceID) {
         // TODO: add proper error handling
         Device d = registry.getDeviceByID(deviceID);
         if (d == null) {

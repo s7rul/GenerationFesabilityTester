@@ -1,5 +1,7 @@
 package eu.arrowhead.client.skeleton.consumer;
 
+import GenerationFeasibilityTester.GenerationFeasibilityTester;
+import deviceRegistryDummy.DeviceRegistry;
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -34,6 +36,7 @@ import eu.arrowhead.common.dto.shared.ServiceInterfaceResponseDTO;
 import eu.arrowhead.common.dto.shared.ServiceQueryFormDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 import eu.arrowhead.common.exception.InvalidParameterException;
+import systemRegistryDummy.SystemRegistry;
 
 import java.io.*;
 
@@ -63,10 +66,15 @@ public class ConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
+
+		SystemRegistry systemRegistry = new SystemRegistry();
+
     	logger.info("Request for generation gotten");
 
-    	int providerServiceID = 0;
-    	int consumerID = 0;
+    	Long providerServiceID = null;
+    	Long consumerID = 9l;
+
+    	Long consumerDeviceID = systemRegistry.getDeviceBySystemID(consumerID);
 
 
     	logger.info("Orchestration request for deploy_jar service:");
@@ -83,6 +91,8 @@ public class ConsumerMain implements ApplicationRunner {
 		//printOut(orchestrationFormRequest);
 		
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
+
+
 		
 		logger.info("Orchestration response:");
 		printOut(orchestrationResponse);		
@@ -92,8 +102,28 @@ public class ConsumerMain implements ApplicationRunner {
 		} else if (orchestrationResponse.getResponse().isEmpty()) {
 			logger.info("No provider found during the orchestration");
 		} else {
-			// TODO: make this actually chose the right service provider
-			final OrchestrationResultDTO orchestrationResult = orchestrationResponse.getResponse().get(0);
+			logger.info("Checking there is way to deploy translator.");
+
+			OrchestrationResultDTO orchestrationResult = null;
+			for (OrchestrationResultDTO n: orchestrationResponse.getResponse()) {
+				if (systemRegistry.getDeviceBySystemID(n.getProvider().getId()) == consumerDeviceID) {
+					orchestrationResult = n;
+				}
+			}
+
+			if (orchestrationResult == null) {
+				logger.info("No way to deploy found, aborting.");
+				return;
+			}
+
+			logger.info("Estimating whether or not the interface can be run on the device.");
+			GenerationFeasibilityTester tester = new GenerationFeasibilityTester();
+
+			if (!tester.generationFeasibilityByDeviceID(consumerDeviceID)) {
+				logger.info("It will probably not run, aborting.");
+				return;
+			}
+
 			validateOrchestrationResult(orchestrationResult, ConsumerConstants.DEPLOY_JAR_SERVICE_DEFINITION);
 			
 			logger.info("Create a request:");
