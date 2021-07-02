@@ -3,3 +3,4 @@
 !src/**
 !.gitignore
 !InterfaceLightweight-1.0.jar
+!pom.xml
