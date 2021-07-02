@@ -63,6 +63,12 @@ public class ConsumerMain implements ApplicationRunner {
     //-------------------------------------------------------------------------------------------------
     @Override
 	public void run(final ApplicationArguments args) throws Exception {
+    	logger.info("Request for generation gotten");
+
+    	int providerServiceID = 0;
+    	int consumerID = 0;
+
+
     	logger.info("Orchestration request for deploy_jar service:");
     	final ServiceQueryFormDTO serviceQueryForm = new ServiceQueryFormDTO.Builder(ConsumerConstants.DEPLOY_JAR_SERVICE_DEFINITION)
     																		.interfaces(getInterface())
@@ -74,7 +80,7 @@ public class ConsumerMain implements ApplicationRunner {
 																					   .flag(Flag.OVERRIDE_STORE, true)
 																					   .build();
 		
-		printOut(orchestrationFormRequest);		
+		//printOut(orchestrationFormRequest);
 		
 		final OrchestrationResponseDTO orchestrationResponse = arrowheadService.proceedOrchestration(orchestrationFormRequest);
 		
