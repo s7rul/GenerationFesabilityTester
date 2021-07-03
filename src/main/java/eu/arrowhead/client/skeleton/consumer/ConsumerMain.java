@@ -138,7 +138,7 @@ public class ConsumerMain implements ApplicationRunner {
 			FileInputStream toDeployStream = null;
 			HttpEntity entity = null;
 			CloseableHttpClient client = HttpClients.createDefault();
-			HttpPost httppost = new HttpPost("http://127.0.0.1:8888/deploy_jar");
+			HttpPost httppost = new HttpPost("http://" + orchestrationResult.getProvider().getAddress() + ":" + orchestrationResult.getProvider().getPort() + orchestrationResult.getServiceUri());
 
 			try {
 			    toDeployStream = new FileInputStream(toDeploy);
