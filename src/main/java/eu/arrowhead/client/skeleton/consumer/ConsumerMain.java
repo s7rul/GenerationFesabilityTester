@@ -135,6 +135,7 @@ public class ConsumerMain implements ApplicationRunner {
 
 			// create payload
 			File toDeploy = new File("/home/s7rul/IdeaProjects/GenerationFesabilityTester/InterfaceLightweight-1.0.jar");
+			//File toDeploy = new File("/home/s7rul/IdeaProjects/GenerationFesabilityTester/InterfaceLightweight-1.0(pi).jar");
 			FileInputStream toDeployStream = null;
 			HttpEntity entity = null;
 			CloseableHttpClient client = HttpClients.createDefault();
