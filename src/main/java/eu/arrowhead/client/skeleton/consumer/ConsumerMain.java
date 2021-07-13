@@ -1,7 +1,9 @@
 package eu.arrowhead.client.skeleton.consumer;
 
 import GenerationFeasibilityTester.GenerationFeasibilityTester;
+import customHttpServices.CustomArrowheadService;
 import deviceRegistryDummy.DeviceRegistry;
+import org.apache.commons.io.FileUtils;
 import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -36,9 +38,15 @@ import eu.arrowhead.common.dto.shared.ServiceInterfaceResponseDTO;
 import eu.arrowhead.common.dto.shared.ServiceQueryFormDTO;
 import eu.arrowhead.common.exception.ArrowheadException;
 import eu.arrowhead.common.exception.InvalidParameterException;
+import org.springframework.web.util.UriComponents;
 import systemRegistryDummy.SystemRegistry;
+import GenerationFeasibilityTester.DeployJarRequestDTO;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.List;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {CommonConstants.BASE_PACKAGE}) //TODO: add custom packages if any
@@ -127,54 +135,22 @@ public class ConsumerMain implements ApplicationRunner {
 			validateOrchestrationResult(orchestrationResult, ConsumerConstants.DEPLOY_JAR_SERVICE_DEFINITION);
 			
 			logger.info("Create a request:");
-			final HttpMethod httpMethod = HttpMethod.valueOf(orchestrationResult.getMetadata().get(ConsumerConstants.HTTP_METHOD));
-			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
-			/*final String sr = arrowheadService.consumeServiceHTTP(String.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(ConsumerConstants.HTTP_METHOD)),
-					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-					getInterface(), token, null, new String[0]);*/
-
 			// create payload
 			File toDeploy = new File("/home/s7rul/IdeaProjects/GenerationFesabilityTester/InterfaceLightweight-1.0.jar");
-			//File toDeploy = new File("/home/s7rul/IdeaProjects/GenerationFesabilityTester/InterfaceLightweight-1.0(pi).jar");
-			FileInputStream toDeployStream = null;
-			HttpEntity entity = null;
-			CloseableHttpClient client = HttpClients.createDefault();
-			HttpPost httppost = new HttpPost("http://" + orchestrationResult.getProvider().getAddress() + ":" + orchestrationResult.getProvider().getPort() + orchestrationResult.getServiceUri());
+			byte[] fileContent = FileUtils.readFileToByteArray(toDeploy);
+			DeployJarRequestDTO request = new DeployJarRequestDTO(Base64.getEncoder().encodeToString(fileContent), 8088);
 
-			try {
-			    toDeployStream = new FileInputStream(toDeploy);
-			    MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
-			    entityBuilder.addPart("file", new InputStreamBody(toDeployStream, toDeploy.getName()));
-			    entityBuilder.addTextBody("test", "tt");
-			    entity = entityBuilder.build();
 
-			    httppost.setEntity(entity);
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-			CloseableHttpResponse response = client.execute(httppost);
 
-			//final String sr = arrowheadService.consumeServiceHTTP(String.class, httpMethod,
-					//orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
-					//getInterface(), token, entity, new String[0]);
-			logger.info("Provider response");
-			//printOut(sr);
 
-			try {
-				System.out.println("#-------------------------------------------------------------#");
-				System.out.println(response.getStatusLine());
-				HttpEntity resEntity = response.getEntity();
-				EntityUtils.consume(resEntity);
-			} catch (Exception e) {
-				System.out.println(e);
-			} finally {
-				response.close();
-			}
-
-			client.close();
+			final HttpMethod httpMethod = HttpMethod.valueOf(orchestrationResult.getMetadata().get(ConsumerConstants.HTTP_METHOD));
+			final String token = orchestrationResult.getAuthorizationTokens() == null ? null : orchestrationResult.getAuthorizationTokens().get(getInterface());
+			final String sr = arrowheadService.consumeServiceHTTP(String.class, HttpMethod.valueOf(orchestrationResult.getMetadata().get(ConsumerConstants.HTTP_METHOD)),
+					orchestrationResult.getProvider().getAddress(), orchestrationResult.getProvider().getPort(), orchestrationResult.getServiceUri(),
+					getInterface(), token, request, new String[0]);
 		}
 	}
-    
+
     private void printOut(final Object object) {
     	System.out.println(Utilities.toPrettyJson(Utilities.toJson(object)));
     }
@@ -182,8 +158,24 @@ public class ConsumerMain implements ApplicationRunner {
     private String getInterface() {
     	return sslProperties.isSslEnabled() ? ConsumerConstants.INTERFACE_SECURE : ConsumerConstants.INTERFACE_INSECURE;
     }
-    
-    private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult, final String serviceDefinitin) {
+
+	private String getUriSchemeFromInterfaceName(final String interfaceName) {
+		String[] splitInterf = interfaceName.split("-");
+		String protocolStr = splitInterf[0];
+		if (!protocolStr.equalsIgnoreCase("http") && !protocolStr.equalsIgnoreCase("https")) {
+			throw new InvalidParameterException("Invalid interfaceName: protocol should be 'http' or 'https'.");
+		} else {
+			boolean isSecure = "SECURE".equalsIgnoreCase(splitInterf[1]);
+			boolean isInsecure = "INSECURE".equalsIgnoreCase(splitInterf[1]);
+			if (!isSecure && !isInsecure) {
+				return sslProperties.isSslEnabled() ? "https" : "http";
+			} else {
+				return isSecure ? "https" : "http";
+			}
+		}
+	}
+
+	private void validateOrchestrationResult(final OrchestrationResultDTO orchestrationResult, final String serviceDefinitin) {
     	if (!orchestrationResult.getService().getServiceDefinition().equalsIgnoreCase(serviceDefinitin)) {
 			throw new InvalidParameterException("Requested and orchestrated service definition do not match");
 		}

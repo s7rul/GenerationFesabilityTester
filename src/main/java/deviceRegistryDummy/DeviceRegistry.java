@@ -1,10 +1,9 @@
 package deviceRegistryDummy;
 
-import GenerationFeasibilityTester.Pair;
-
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import GenerationFeasibilityTester.Pair;
 
 public class DeviceRegistry {
 	private Hashtable<Long, Device> table = new Hashtable<>();
